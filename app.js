@@ -31,9 +31,16 @@ var client = new dogecoin.Client({
   pass: process.env.DOGE_PASS
 });
 
+var addressesByAccount = function(fn) {
+  client.getAddressesByAccount('', function(err, addresses) {
+    if (err) { fn(err, null); }
+    fn(null, addresses);
+  });
+};
 
-var generateAddress = function (fn) {
+var generateAddress = function(fn) {
   client.getNewAddress(function(err, address) {
+    if (err) { console.log(err)}
     if (err) { fn(err, null); }
     fn(null, address);
   });
@@ -47,9 +54,19 @@ var so = {
         if (err) { 
           request.reply({code: 500, error: err })
         }
-        request.reply({code: 200});
+        request.reply({code: 200, success: 'address successfully generated'});
       })
       
+    }
+  }, 
+  list_address_groupings: {
+    handler: function(request) {
+      addressesByAccount(function(err, addresses) {
+        if (err) {
+          request.reply({code: 500, error: err})
+        }
+        request.reply({code: 200, accounts: addresses})
+      })
     }
   }
 }
@@ -60,6 +77,13 @@ server.route({
   method  : 'GET',
   path    : '/so/generate_address',
   config  : so.generate_address
+});
+
+
+server.route({
+  method  : 'GET',
+  path    : '/so/list_address_groupings',
+  config  : so.list_address_groupings
 });
 
 server.start(function() {
