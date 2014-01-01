@@ -21,7 +21,7 @@ var port        = parseInt(process.env.PORT) || 3000;
 var Hapi        = require('hapi');
 server          = new Hapi.Server(+port, '0.0.0.0', { cors: true });
 
-var v0 = {
+var so = {
   generate_address: {
     handler: function(request) {
       // put code here to generate address
@@ -32,8 +32,8 @@ var v0 = {
 
 server.route({
   method  : 'GET',
-  path    : '/so/v0/generate_address',
-  config  : v0.generate_address
+  path    : '/so/generate_address',
+  config  : so.generate_address
 });
 
 server.start(function() {
