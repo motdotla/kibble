@@ -1,8 +1,9 @@
 var dotenv      = require('dotenv');
 dotenv.load();
-var dogecoin = require('bitcoin');
 
 // Libraries
+var commands    = require('./commands')
+var dogecoin    = require('bitcoin');
 var redis       = require('redis');
 
 var e           = module.exports;
@@ -18,50 +19,65 @@ if (redis_url.auth) {
   db.auth(redis_url.auth.split(":")[1]); 
 }
 
+// Hapijs Server
 var port        = parseInt(process.env.PORT) || 3000;
 var Hapi        = require('hapi');
-server          = new Hapi.Server(+port, '0.0.0.0', { cors: true });
+var server      = new Hapi.Server(+port, '0.0.0.0', { cors: true });
 
-
-
-var client = new dogecoin.Client({
+var bitclient = new dogecoin.Client({
   host: process.env.DOGE_HOST,
   port: process.env.DOGE_PORT,
   user: process.env.DOGE_USER,
   pass: process.env.DOGE_PASS
 });
 
+//===----------------------------------------------------------------------===//
+// callBitcoinModule
+//===----------------------------------------------------------------------===//
+function callBitcoinModule(cmd, args, fn) {
+  bitclient[cmd](function(err, data) {
+    //var args = [].slice.call(arguments);
+    //args.unshift(null);
+    fn(err, data);
+    //fn.apply(this, args);
+  });
+}
+
 var getNewAddress = function(fn) {
-  client.getNewAddress(function(err, address) {
+  bitclient.getNewAddress(function(err, address) {
     if (err) { fn(err, null); }
     fn(null, address);
   });
 };
 
 var getAddressesByAccount = function(fn) {
-  client.getAddressesByAccount('', function(err, addresses) {
+  bitclient.getAddressesByAccount('', function(err, addresses) {
     if (err) { fn(err, null); }
     fn(null, addresses);
   });
 };
 
 var getBalance = function(address, fn) {
-  client.getBalance(address, function(err, balance) {
+  bitclient.getBalance(address, function(err, balance) {
     if (err) { fn(err, null); }
     fn(null, balance);
   });
 };
 
-
 var so = {
   get_new_address: {
     handler: function(request) {
-      getNewAddress(function(err, address) {
-        if (err) { 
-          request.reply({code: 500, error: err })
-        }
-        request.reply({code: 200, success: 'address successfully generated'});
-      })
+      callBitcoinModule("getNewAddress", null, function(err, data) {
+        console.log(err);
+        console.log(data);
+        request.reply({working: true});
+      });
+      //getNewAddress(function(err, address) {
+      //  if (err) { 
+      //    request.reply({code: 500, error: err })
+      //  }
+      //  request.reply({code: 200, success: 'address successfully generated'});
+      //})
       
     }
   },
@@ -77,15 +93,22 @@ var so = {
   },
   get_balance: {
     handler: function(request) {
-      getBalance('', function(err, balance) {
-        if (err) {
-          request.reply({code: 500, error: err})
-        }
-        request.reply({code: 200, balance: balance})
-      })
+      callBitcoinModule("getBalance", "", function(err, data) {
+        console.log(err);
+        console.log(data);
+        request.reply({working: true});
+      });
+
+      //getBalance('', function(err, balance) {
+      //  if (err) {
+      //    request.reply({code: 500, error: err})
+      //  }
+      //  request.reply({code: 200, balance: balance})
+      //})
     }
   }
 }
+
 
 
 
