@@ -31,31 +31,32 @@ var client = new dogecoin.Client({
   pass: process.env.DOGE_PASS
 });
 
-var addressesByAccount = function(fn) {
+var getNewAddress = function(fn) {
+  client.getNewAddress(function(err, address) {
+    if (err) { fn(err, null); }
+    fn(null, address);
+  });
+};
+
+var getAddressesByAccount = function(fn) {
   client.getAddressesByAccount('', function(err, addresses) {
     if (err) { fn(err, null); }
     fn(null, addresses);
   });
 };
 
-var generateAddress = function(fn) {
-  client.getNewAddress(function(err, address) {
-    if (err) { console.log(err)}
+var getBalance = function(address, fn) {
+  client.getBalance(address, function(err, balance) {
     if (err) { fn(err, null); }
-    fn(null, address);
+    fn(null, balance);
   });
 };
 
-var getBalance = function(address) {
-  client.getBalance(address, function(err, balance) {
-    console.log(balance);
-  });
-};
 
 var so = {
-  generate_address: {
+  get_new_address: {
     handler: function(request) {
-      generateAddress(function(err, address) {
+      getNewAddress(function(err, address) {
         if (err) { 
           request.reply({code: 500, error: err })
         }
@@ -64,9 +65,9 @@ var so = {
       
     }
   },
-  list_address_groupings: {
+  get_addresses_by_account: {
     handler: function(request) {
-      addressesByAccount(function(err, addresses) {
+      getAddressesByAccount(function(err, addresses) {
         if (err) {
           request.reply({code: 500, error: err})
         }
@@ -76,7 +77,7 @@ var so = {
   },
   get_balance: {
     handler: function(request) {
-      getBalance(function(err, balance) {
+      getBalance('', function(err, balance) {
         if (err) {
           request.reply({code: 500, error: err})
         }
@@ -90,15 +91,15 @@ var so = {
 
 server.route({
   method  : 'GET',
-  path    : '/so/generate_address',
-  config  : so.generate_address
+  path    : '/so/get_new_address',
+  config  : so.get_new_address
 });
 
 
 server.route({
   method  : 'GET',
-  path    : '/so/list_address_groupings',
-  config  : so.list_address_groupings
+  path    : '/so/get_addresses_by_account',
+  config  : so.get_addresses_by_account
 });
 
 server.route({
