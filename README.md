@@ -4,8 +4,8 @@
 
 ### Requirements
 
-[Redis](http://redis.io] running
-[Node.js](http://nodejs.org] installed
+[Redis](http://redis.io) running
+[Node.js](http://nodejs.org) installed
 
 ```
 cd kibble
