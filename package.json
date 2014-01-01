@@ -1,0 +1,22 @@
+{
+  "name": "kibble",
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "main": "app.js",
+  "description": "Bacon and tips.",
+  "dependencies": {
+    "dotenv": "0.2.3",
+    "handlebars": "1.1.2",
+    "hapi": "1.6.2",
+    "moment": "2.4.0",
+    "bitcoin": "2.0.0",
+    "redis": "0.9.0",
+    "request": "2.21.0",
+    "validator": "1.5.1", 
+    "yar": "0.4.1"
+  }
+}
+
