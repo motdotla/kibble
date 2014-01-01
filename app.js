@@ -46,6 +46,11 @@ var generateAddress = function(fn) {
   });
 };
 
+var getBalance = function(address) {
+  client.getBalance(address, function(err, balance) {
+    console.log(balance);
+  });
+};
 
 var so = {
   generate_address: {
@@ -58,7 +63,7 @@ var so = {
       })
       
     }
-  }, 
+  },
   list_address_groupings: {
     handler: function(request) {
       addressesByAccount(function(err, addresses) {
@@ -66,6 +71,16 @@ var so = {
           request.reply({code: 500, error: err})
         }
         request.reply({code: 200, accounts: addresses})
+      })
+    }
+  },
+  get_balance: {
+    handler: function(request) {
+      getBalance(function(err, balance) {
+        if (err) {
+          request.reply({code: 500, error: err})
+        }
+        request.reply({code: 200, balance: balance})
       })
     }
   }
@@ -84,6 +99,12 @@ server.route({
   method  : 'GET',
   path    : '/so/list_address_groupings',
   config  : so.list_address_groupings
+});
+
+server.route({
+  method  : 'GET',
+  path    : '/so/get_balance',
+  config  : so.get_balance
 });
 
 server.start(function() {
