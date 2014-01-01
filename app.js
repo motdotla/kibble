@@ -1,5 +1,6 @@
 var dotenv      = require('dotenv');
 dotenv.load();
+var dogecoin = require('bitcoin');
 
 // Libraries
 var redis       = require('redis');
@@ -21,14 +22,39 @@ var port        = parseInt(process.env.PORT) || 3000;
 var Hapi        = require('hapi');
 server          = new Hapi.Server(+port, '0.0.0.0', { cors: true });
 
+
+
+var client = new dogecoin.Client({
+  host: process.env.DOGE_HOST,
+  port: process.env.DOGE_PORT,
+  user: process.env.DOGE_USER,
+  pass: process.env.DOGE_PASS
+});
+
+
+var generateAddress = function (fn) {
+  client.getNewAddress(function(err, address) {
+    if (err) { fn(err, null); }
+    fn(null, address);
+  });
+};
+
+
 var so = {
   generate_address: {
     handler: function(request) {
-      // put code here to generate address
-      request.reply({code: 200});
+      generateAddress(function(err, address) {
+        if (err) { 
+          request.reply({code: 500, error: err })
+        }
+        request.reply({code: 200});
+      })
+      
     }
   }
 }
+
+
 
 server.route({
   method  : 'GET',
