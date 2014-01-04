@@ -21,6 +21,7 @@ TODO: List of all available API commands will go here.
 
 ```
 git clone https://github.com/scottmotte/kibble.git
+cd kibble
 heroku create
 heroku config:set DOGE_HOST=101.101.101.101
 heroku config:set DOGE_PORT=22555
