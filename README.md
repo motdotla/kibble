@@ -21,6 +21,10 @@ TODO: List of all available API commands will go here.
 
 ## Installation
 
+### Prerequisites
+
+You need to have a `dogecoind` server that the API can talk to. I've created an easy way to do this [here](https://github.com/scottmotte/ansible-dogecoind) - called [ansible-dogecoind](https://github.com/scottmotte/ansible-dogecoind).
+
 ### Heroku
 
 ```
