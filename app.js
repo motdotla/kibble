@@ -5,21 +5,10 @@ dotenv.load();
 var changeCase  = require('change-case');
 var commands    = require('./commands');
 var dogecoin    = require('bitcoin');
-var redis       = require('redis');
 var _           = require('underscore');
 
 var e           = module.exports;
 e.ENV           = process.env.NODE_ENV || 'development';
-
-// Constants
-var REDIS_URL   = process.env.REDIS_URL || process.env.REDISTOGO_URL || "redis://localhost:6379";
-
-// Database
-var redis_url   = require("url").parse(REDIS_URL);
-var db          = redis.createClient(redis_url.port, redis_url.hostname);
-if (redis_url.auth) {
-  db.auth(redis_url.auth.split(":")[1]); 
-}
 
 // Hapijs Server
 var port        = parseInt(process.env.PORT) || 3000;

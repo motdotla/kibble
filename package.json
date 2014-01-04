@@ -10,15 +10,10 @@
   "dependencies": {
     "change-case": "1.0.4",
     "dotenv": "0.2.3",
-    "handlebars": "1.1.2",
     "hapi": "1.6.2",
-    "moment": "2.4.0",
     "bitcoin": "2.0.0",
-    "redis": "0.9.0",
     "request": "2.21.0",
-    "underscore": "1.5.2",
-    "validator": "1.5.1", 
-    "yar": "0.4.1"
+    "underscore": "1.5.2"
   }
 }
 
