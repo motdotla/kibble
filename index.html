@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Kibble by scottmotte</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Kibble</h1>
+        <p>RESTful API on top of Dogecoin. So endpnts.</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/scottmotte/kibble" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/scottmotte/kibble/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/scottmotte/kibble/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="kibble" class="anchor" href="#kibble"><span class="octicon octicon-link"></span></a>kibble</h1>
+
+<p>RESTful API on top of Dogecoin.</p>
+
+<p><img src="https://raw.github.com/scottmotte/kibble/master/kibble.png" alt=""></p>
+
+<p>If you would like some tip to this shibe: <code>DEfjuBpDUa9fh98mzzyfHFNjuzGSKFgoWt</code></p>
+
+<pre><code>curl -X GET http://localhost:3000/so/get_balance
+</code></pre>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>TODO: List of all available API commands will go here.</p>
+
+<pre><code>/so/get_balance
+/so/get_transaction?args=&lt;transaction_id&gt;
+</code></pre>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<h3>
+<a name="heroku" class="anchor" href="#heroku"><span class="octicon octicon-link"></span></a>Heroku</h3>
+
+<pre><code>git clone https://github.com/scottmotte/kibble.git
+cd kibble
+heroku create
+heroku config:set DOGE_HOST=101.101.101.101
+heroku config:set DOGE_PORT=22555
+heroku config:set DOGE_USER=dogeuser
+heroku config:set DOGE_PASS=dogepassword
+git push heroku master
+</code></pre>
+
+<p>That's it. You will now have running RESTful API access to your Dogecoin installation.</p>
+
+<h3>
+<a name="development" class="anchor" href="#development"><span class="octicon octicon-link"></span></a>Development</h3>
+
+<pre><code>git clone https://github.com/scottmotte/kibble.git
+cd kibble
+npm install
+cp .env.example .env
+</code></pre>
+
+<p>Edit the contents of <code>.env</code> to match your local Dogecoin install.</p>
+
+<pre><code>node app.js
+</code></pre>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/scottmotte">scottmotte</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
