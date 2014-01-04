@@ -12,7 +12,7 @@ var e           = module.exports;
 e.ENV           = process.env.NODE_ENV || 'development';
 
 // Constants
-var REDIS_URL               = process.env.REDIS_URL || process.env.REDISTOGO_URL || "redis://localhost:6379";
+var REDIS_URL   = process.env.REDIS_URL || process.env.REDISTOGO_URL || "redis://localhost:6379";
 
 // Database
 var redis_url   = require("url").parse(REDIS_URL);
@@ -33,69 +33,42 @@ var bitclient = new dogecoin.Client({
   pass: process.env.DOGE_PASS
 });
 
-runCommand
-function runCommand(cmd, args, fn) {
-  if (args && args.length) {
-    bitclient[cmd](args, function(err, data) {
-      fn(err, data);
-    });
-  } else {
-    bitclient[cmd](function(err, data) {
-      fn(err, data);
-    });
+function arrayifyArgsFromQuery(query) {
+  var args = [];
+  if (query.args) {
+    args = query.args.split(","); 
+  }
+
+  return args;
+}
+
+function handleResponseThunk(request) {
+  return function(err, data) {
+    if (err) { 
+      request.reply({code: 500, error: err })
+    }
+
+    request.reply({code: 200, data: data});
   }
 }
 
-//validate address
-// var validateAddress = function(address) {
-//   bitclient.validateAddress(address, function(err, address) {
-//     if (err) { alert(err) }
-//     else if (address) { alert(address) }
-//  });
-//  };
-
-//   validate_address = {
-//        handler: function(request) {
-//         validateAddress('DC7M85qVB94e4jGMz1U3HpMSWHH7Uanhuw', function(err, data) {
-//           if (err) { 
-//             request.reply({code: 500, error: err })
-//           }
-//           request.reply({code: 200, data: data});
-//         });
-//       }
-//     }
-
-
-//validate address
-  // server.route({
-  //   method  : 'GET',
-  //   path    : '/so/validate_address',
-  //   config  : validate_address
-  // });
-
-
-
-_.each(commands, function(value, key) {
+_.each(commands, function(value, cmd) {
   var config = {
     handler: function(request) {
-      runCommand(key, null, function(err, data) {
-        if (err) { 
-          request.reply({code: 500, error: err })
-        }
-        request.reply({code: 200, data: data});
-      });
+      var args    = arrayifyArgsFromQuery(request.query);
+      var handler = handleResponseThunk(request);
+
+      args.push(handler);
+      bitclient[cmd].apply(bitclient, args);
     }
   }
 
   server.route({
     method  : 'GET',
-    path    : '/so/'+changeCase.snakeCase(key),
+    path    : '/so/'+changeCase.snakeCase(cmd),
     config  : config
   });
-
 });
-
-
 
 server.start(function() {
   console.log('Kibble server started at: ' + server.info.uri);
