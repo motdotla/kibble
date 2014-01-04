@@ -2,6 +2,10 @@
 
 RESTful API on top of Dogecoin.
 
+![](https://raw.github.com/scottmotte/kibble/master/kibble.png)
+
+If you would like some tip to this shibe: `DEfjuBpDUa9fh98mzzyfHFNjuzGSKFgoWt`
+
 ```
 curl -X GET http://localhost:3000/so/get_balance
 ```
