@@ -28,7 +28,18 @@ function arrayifyArgsFromQuery(query) {
     args = query.args.split(","); 
   }
 
-  return args;
+  var newargs = [];
+  args.forEach(function(arg) {
+    var number_as_float = parseFloat(arg);
+
+    if (isNaN(number_as_float)) {
+      newargs.push(number_as_float);
+    } else {
+      newargs.push(arg);
+    }
+  });
+
+  return newargs;
 }
 
 function handleResponseThunk(request) {
@@ -62,3 +73,10 @@ _.each(commands, function(value, cmd) {
 server.start(function() {
   console.log('Kibble server started at: ' + server.info.uri);
 });
+
+
+
+
+
+
+
