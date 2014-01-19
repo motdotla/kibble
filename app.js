@@ -33,9 +33,9 @@ function arrayifyArgsFromQuery(query) {
     var number_as_float = parseFloat(arg);
 
     if (isNaN(number_as_float)) {
-      newargs.push(number_as_float);
-    } else {
       newargs.push(arg);
+    } else {
+      newargs.push(number_as_float);
     }
   });
 
