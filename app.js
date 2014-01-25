@@ -8,10 +8,10 @@ var dogecoin    = require('bitcoin');
 var _           = require('underscore');
 
 var e           = module.exports;
-e.ENV           = process.env.NODE_ENV || 'development';
+e.ENV           = process.env.NODE_ENV || 'production';
 
 // Hapijs Server
-var port        = parseInt(process.env.PORT) || 3000;
+var port        = parseInt(process.env.PORT) || 22556;
 var Hapi        = require('hapi');
 var server      = new Hapi.Server(+port, '0.0.0.0', { cors: true });
 
@@ -43,26 +43,31 @@ function arrayifyArgsFromQuery(query) {
 }
 
 function handleResponseThunk(request) {
+  var ip = request.info.remoteAddress;
+  console.log('Incoming request: ' + ip);
   return function(err, data) {
     if (err) { 
       request.reply({code: 500, error: err })
     }
-
-    request.reply({code: 200, data: data});
+     if ( ip == String(process.env.APP_IP)) {
+		request.reply({code: 200, data: data});
+	}
+	else {
+		request.reply({code: 404, error: 'not found'});
+		console.log('request denied: ' + ip);
+	}
   }
 }
 
 _.each(commands, function(value, cmd) {
   var config = {
     handler: function(request) {
-      var args    = arrayifyArgsFromQuery(request.query);
+    var args    = arrayifyArgsFromQuery(request.query);
       var handler = handleResponseThunk(request);
-
       args.push(handler);
       bitclient[cmd].apply(bitclient, args);
     }
-  }
-
+}
   server.route({
     method  : 'GET',
     path    : '/so/'+changeCase.snakeCase(cmd),
