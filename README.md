@@ -121,7 +121,7 @@ npm install
 cp .env.example .env
 ```
 
-Edit the contents of `.env` to match your local Dogecoin install.
+Edit the contents of `.env` to match your local Dogecoin install and your application's dedicated IP address
 
 ```
 node app.js
